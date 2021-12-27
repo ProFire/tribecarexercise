@@ -4,7 +4,6 @@ phases:
   install:
     commands:
       - printenv
-      - printenv | grep ENVIRONMENT
   pre_build:
     commands:
   build:
