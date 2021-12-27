@@ -328,7 +328,7 @@ resource "aws_codebuild_project" "tribecarexercise-codebuild" {
     }
 
     environment_variable {
-      name  = "RDS_PASSWORD"
+      name  = "RDS_YELLOW_CAKE"
       value = aws_db_instance.tribecarexercise-db-instance.password
     }
 
