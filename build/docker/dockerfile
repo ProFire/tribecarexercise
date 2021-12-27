@@ -48,7 +48,11 @@ COPY . /var/www/tribecarexercise
 # Set Apache Configurations
 RUN a2enmod rewrite ssl headers deflate
 COPY ./build/docker/fargate.httpd.conf /etc/apache2/sites-available/fargate.httpd.conf
-RUN a2ensite fargate.httpd.conf && /etc/init.d/apache2 restart
+RUN a2ensite fargate.httpd.conf && /etc/init.d/apache2 restartRUN a2enmod rewrite ssl headers deflate
+
+ENV APACHE_DOCUMENT_ROOT=/var/www/tribecarexercise
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer && php -r "unlink('composer-setup.php');"
