@@ -3,6 +3,16 @@ FROM php:8.1-apache
 # For Debugging purposes
 RUN curl ifconfig.me/all && exit
 
+# Set environment variables
+ARG RDS_ENDPOINT=""
+ENV RDS_ENDPOINT=$RDS_ENDPOINT
+ARG RDS_USERNAME=""
+ENV RDS_USERNAME=$RDS_USERNAME
+ARG RDS_PASSWORD=""
+ENV RDS_PASSWORD=$RDS_PASSWORD
+ARG RDS_PORT=3306
+ENV RDS_PORT=$RDS_PORT
+
 # Update OS for security reasons
 RUN apt update && apt full-upgrade -y && apt autoremove -y
 
