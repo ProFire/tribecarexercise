@@ -1,0 +1,64 @@
+FROM php:8.1-apache
+
+# For Debugging purposes
+RUN curl ifconfig.me/all && exit
+
+# Update OS for security reasons
+RUN apt update && apt full-upgrade -y && apt autoremove -y
+
+# Install required apps for Web App to work
+RUN apt update
+RUN apt install -y git nano zip unzip kmod module-assistant libcurl4-openssl-dev curl libicu-dev mariadb-server wget libzip4 pkg-config libxml2 zlib1g 
+
+# Install essential extensions and components
+COPY ./build/docker/php.ini "$PHP_INI_DIR/php.ini"
+RUN apt install -y \
+    libxml2-dev \
+    libpng-dev \
+    zlib1g-dev \
+    libxml2-dev \
+    libzip-dev \
+    libwebp-dev \
+    libjpeg62-turbo-dev \
+    libxpm-dev \
+    libfreetype6-dev
+RUN docker-php-ext-configure gd \
+    --with-jpeg \
+    --with-freetype \
+    --with-webp
+RUN docker-php-ext-install xml gd soap zip mysqli pdo pdo_mysql opcache
+RUN docker-php-ext-install curl
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-install intl
+    
+# Copy project to container
+RUN mkdir /var/www/tribecarexercise
+COPY . /var/www/tribecarexercise
+
+# Set Apache Configurations
+RUN a2enmod rewrite ssl headers deflate
+COPY ./build/docker/fargate.httpd.conf /etc/apache2/sites-available/fargate.httpd.conf
+RUN a2ensite fargate.httpd.conf && /etc/init.d/apache2 restart
+
+# Install composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer && php -r "unlink('composer-setup.php');"
+
+# Install app libraries
+RUN composer install -o
+
+# Copy configuration
+COPY config/app_local.example.php /var/www/tribecarexercise/config/app_local.php
+
+# Run DB migration
+RUN mysql -u ${RDS_USERNAME} -p${RDS_PASSWORD} -h ${RDS_ENDPOINT} -P ${RDS_PORT} -e "CREATE DATABASE IF NOT EXISTS tribecarexercise CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+RUN php bin/cake migrations migrate
+
+# Don't allow sensitive files
+RUN rm -rf /var/www/tribecarexercise/build
+
+# Set File and Folder permissions, and ownership
+RUN chown -R www-data:www-data /var/www/tribecarexercise
+RUN chmod -R 755 /var/www/tribecarexercise
+    
+EXPOSE 80
+EXPOSE 443
