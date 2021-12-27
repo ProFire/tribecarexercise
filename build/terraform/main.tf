@@ -328,7 +328,7 @@ resource "aws_codebuild_project" "tribecarexercise-codebuild" {
     }
 
     environment_variable {
-      name  = "RDS_YELLOW_CAKE"
+      name  = "RDS_PASSWORD"
       value = aws_db_instance.tribecarexercise-db-instance.password
     }
 
@@ -567,7 +567,7 @@ resource "aws_db_instance" "tribecarexercise-db-instance" {
   instance_class            = "db.t3.small"
   name                      = "tribecarexercisedbinstance"
   username                  = "tribecarexercise"
-  password                  = "$uper$3cret"
+  password                  = "thisisasuperlongstringthatnooneknows"
   db_subnet_group_name      = aws_db_subnet_group.tribecarexercise-db-subnet-group.name
   skip_final_snapshot       = true
   final_snapshot_identifier = "secretlabfinalsnapshot"
