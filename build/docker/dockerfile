@@ -65,7 +65,7 @@ COPY config/app_local.example.php /var/www/tribecarexercise/config/app_local.php
 
 # Run DB migration
 RUN mysql --password=${RDS_PASSWORD} --user=${RDS_USERNAME} --host=${RDS_ENDPOINT} --port=${RDS_PORT} --execute="CREATE DATABASE IF NOT EXISTS tribecarexercise CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-RUN php bin/cake migrations migrate
+RUN cd /var/www/tribecarexercise/ && php bin/cake migrations migrate
 
 # Don't allow sensitive files
 RUN rm -rf /var/www/tribecarexercise/build
