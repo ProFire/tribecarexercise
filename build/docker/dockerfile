@@ -12,6 +12,10 @@ ARG RDS_PASSWORD=""
 ENV RDS_PASSWORD=$RDS_PASSWORD
 ARG RDS_PORT=3306
 ENV RDS_PORT=$RDS_PORT
+RUN echo ${RDS_ENDPOINT}
+RUN echo ${RDS_USERNAME}
+RUN echo ${RDS_PASSWORD}
+RUN echo ${RDS_PORT}
 
 # Update OS for security reasons
 RUN apt update && apt full-upgrade -y && apt autoremove -y
