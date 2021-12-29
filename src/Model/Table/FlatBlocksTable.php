@@ -3,33 +3,29 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\Rule\IsUnique;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class FlatUnitsTable extends Table
+class FlatBlocksTable extends Table
 {
     public function initialize(array $config): void
     {
         $this->addBehavior("Timestamp");
 
-        $this->belongsTo("FlatBlocks");
-
-        $this->hasMany("Tenants")
-            ->setDependent(true)
-        ;
-        $this->hasMany("Visitors")
+        $this->hasMany("FlatUnits")
             ->setDependent(true)
         ;
     }
 
     public function validationDefault(Validator $validator): Validator
     {
-        // unit
+        // block
         $validator
-            ->requirePresence('unit', 'create')
-            ->notEmptyString('unit')
-            ->add("unit", "maxLength", [
+            ->requirePresence('block', 'create')
+            ->notEmptyString('block')
+            ->add("block", "maxLength", [
                 "rule" => ["maxLength", 20]
             ])
         ;
@@ -39,12 +35,8 @@ class FlatUnitsTable extends Table
 
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(
-            ['unit', 'flat_block_id'],
-            "This unit for the block already exist in database."
-        ));
-
-        $rules->add($rules->existsIn('flat_block_id', 'FlatBlocks'));
+        // Add a rule that is applied for create and update operations
+        $rules->add($rules->isUnique(['block']));
 
         return $rules;
     }
