@@ -19,6 +19,9 @@ class FlatBlocksTable extends Table
         ;
     }
 
+    /**
+     * Validation
+     */
     public function validationDefault(Validator $validator): Validator
     {
         // block
@@ -33,6 +36,9 @@ class FlatBlocksTable extends Table
         return $validator;
     }
 
+    /**
+     * Rules
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         // Add a rule that is applied for create and update operations

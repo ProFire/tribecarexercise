@@ -7,6 +7,9 @@ use Cake\Http\Response;
 
 class VisitorsController extends AppController
 {
+    /**
+     * CRUD op: Listing of Visitors
+     */
     public function index(int $flatUnitId): ?Response
     {
         $this->paginate = [
@@ -29,6 +32,9 @@ class VisitorsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Viewing a single Visitor
+     */
     public function view(int $id): ?Response
     {
         $visitorEntity = $this->Visitors->get($id, [
@@ -42,6 +48,9 @@ class VisitorsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Adding a new Visitor
+     */
     public function add(int $flatUnitId = null): ?Response
     {
         if ($flatUnitId === null) {
@@ -80,6 +89,9 @@ class VisitorsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Editing an existing Visitor
+     */
     public function edit(int $id): ?Response
     {
         $visitorEntity = $this->Visitors->get($id, [
@@ -103,6 +115,11 @@ class VisitorsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Deleting a Visitor
+     * Warning: This is a destruction act
+     * Security: Only POST and DELETE methods are allowed to prevent web crawler from deleting Visitors
+     */
     public function delete(int $id): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -119,6 +136,9 @@ class VisitorsController extends AppController
         }
     }
 
+    /**
+     * This is a single action to check out a visitor
+     */
     public function checkOut(int $id): ?Response
     {
         $visitorEntity = $this->Visitors->get($id);
@@ -126,11 +146,21 @@ class VisitorsController extends AppController
         return $this->redirect($this->referer(["action" => "index", $visitorEntity->flat_unit_id]));
     }
 
+    /**
+     * This is the visitor's portal to show the incoming visitors to check in or out
+     * This is a single page application for the visitor
+     */
     public function visitorPortal(): ?Response
     {
         return $this->render();
     }
 
+    /**
+     * A single ajax action to checkout visitors based on NRIC and contact
+     * 
+     * @param string contact The POST must contain contact
+     * @param string nric The POST must contain nric
+     */
     public function visitorCheckOut(): ?Response
     {
         $this->request->allowMethod(['post']);

@@ -3,6 +3,10 @@
 <div id="spa" class="ui segment loading basic"><br /><br /><br /></div>
 
 <script>
+
+/**
+ * State Variables
+ */
 let blockId = null;
 let unitId = null;
 let name = null;
@@ -10,6 +14,10 @@ let contact = null;
 let nric = null;
 let unitAllowCheckIn = false;
 
+/**
+ * The first page in the check-in/check-out op
+ * Visitor is to select whether to check in or out
+ */
 let page1 = function() {
     jQuery("#spa").removeClass("loading");
     jQuery("#spa").html('<div class="ui placeholder segment">\
@@ -33,6 +41,11 @@ let page1 = function() {
     </div>');
 }
 
+/**
+ * Check-in Flow: Step 1
+ * 
+ * Ask the visitor which block to visit
+ */
 let page2 = function() {
     jQuery.get("<?= $this->Url->build("/api/flat-blocks.json") ?>", function(data, textStatus, jqXHR){
         jQuery("#spa").removeClass("loading");
@@ -70,6 +83,11 @@ let page2 = function() {
     });
 }
 
+/**
+ * Check-in Flow: Step 2
+ * 
+ * Ask the visitor which unit in the block to visit
+ */
 let page3 = function() {
     jQuery.get("<?= $this->Url->build("/") ?>api/flat-blocks/" + blockId + ".json", function(data, textStatus, jqXHR) {
         jQuery("#spa").removeClass("loading");
@@ -122,6 +140,11 @@ let page3 = function() {
     });
 }
 
+/**
+ * Check-in Flow: Step 3
+ * 
+ * Ask the visitor about the particulars
+ */
 let page4 = function() {
     jQuery("#spa").removeClass("loading");
     
@@ -203,6 +226,11 @@ let page4 = function() {
     jQuery("#spa").html(registrationForm);
 }
 
+/**
+ * Check-in Flow: Step 4
+ * 
+ * Inform Visitor about successful check in
+ */
 let page5 = function() {
     jQuery("#spa").removeClass("loading");
 
@@ -265,6 +293,11 @@ let page5 = function() {
 
 }
 
+/**
+ * Check-out Flow: Step 1
+ * 
+ * Ask the visitor about the particulars
+ */
 let pageCheckOutForm = function() {
     jQuery("#spa").removeClass("loading");
     jQuery("#spa").html('<form class="ui large form centered grid">\
@@ -286,6 +319,11 @@ let pageCheckOutForm = function() {
     </form>');
 }
 
+/**
+ * Check-out Flow: Step 2
+ * 
+ * Inform Visitor about successful check out
+ */
 let pageCheckOutComplete = function() {
     jQuery("#spa").removeClass("loading");
     jQuery("#spa").html('<div class="ui four cards centered">\

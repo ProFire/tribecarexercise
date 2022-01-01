@@ -23,6 +23,9 @@ class FlatUnitsTable extends Table
         ;
     }
 
+    /**
+     * Validation
+     */
     public function validationDefault(Validator $validator): Validator
     {
         // unit
@@ -37,6 +40,9 @@ class FlatUnitsTable extends Table
         return $validator;
     }
 
+    /**
+     * Rules
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(

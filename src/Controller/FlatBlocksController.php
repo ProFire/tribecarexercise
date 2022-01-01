@@ -7,6 +7,9 @@ use Cake\Http\Response;
 
 class FlatBlocksController extends AppController
 {
+    /**
+     * CRUD op: Listing of Blocks
+     */
     public function index(): ?Response
     {
         $this->loadComponent('Paginator');
@@ -15,6 +18,9 @@ class FlatBlocksController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Viewing a single Block
+     */
     public function view(int $id): ?Response
     {
         $flatBlockEntity = $this->FlatBlocks->get($id, [
@@ -26,6 +32,9 @@ class FlatBlocksController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Adding a new Block
+     */
     public function add(): ?Response
     {
         $flatBlockEntity = $this->FlatBlocks->newEmptyEntity();
@@ -42,6 +51,9 @@ class FlatBlocksController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Editing an existing Block
+     */
     public function edit(int $id): ?Response
     {
         $flatBlockEntity = $this->FlatBlocks->get($id);
@@ -58,6 +70,11 @@ class FlatBlocksController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Deleting a Block
+     * Warning: This is a destruction act
+     * Security: Only POST and DELETE methods are allowed to prevent web crawler from deleting blocks
+     */
     public function delete(int $id): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);

@@ -16,6 +16,9 @@ class TenantsTable extends Table
         $this->belongsTo("FlatUnits");
     }
 
+    /**
+     * Validation
+     */
     public function validationDefault(Validator $validator): Validator
     {
         // name
@@ -39,6 +42,9 @@ class TenantsTable extends Table
         return $validator;
     }
 
+    /**
+     * Rules
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(

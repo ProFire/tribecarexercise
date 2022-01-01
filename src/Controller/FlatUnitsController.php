@@ -7,6 +7,9 @@ use Cake\Http\Response;
 
 class FlatUnitsController extends AppController
 {
+    /**
+     * CRUD op: Listing of Units
+     */
     public function index(int $flatBlockId = null): ?Response
     {
         if ($flatBlockId === null) {
@@ -20,6 +23,9 @@ class FlatUnitsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Viewing a single Unit
+     */
     public function view(int $id): ?Response
     {
         $flatUnitEntity = $this->FlatUnits->get($id, [
@@ -34,6 +40,9 @@ class FlatUnitsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Adding a new Unit
+     */
     public function add(int $flatBlockId): ?Response
     {
         $flatUnitEntity = $this->FlatUnits->newEmptyEntity();
@@ -54,6 +63,9 @@ class FlatUnitsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Editing an existing Unit
+     */
     public function edit(int $id): ?Response
     {
         $flatUnitEntity = $this->FlatUnits->get($id, [
@@ -79,6 +91,11 @@ class FlatUnitsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Deleting a Unit
+     * Warning: This is a destruction act
+     * Security: Only POST and DELETE methods are allowed to prevent web crawler from deleting units
+     */
     public function delete(int $id): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);

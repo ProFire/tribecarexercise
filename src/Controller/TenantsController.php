@@ -7,6 +7,9 @@ use Cake\Http\Response;
 
 class TenantsController extends AppController
 {
+    /**
+     * CRUD op: Viewing a single Tenant
+     */
     public function view(int $id): ?Response
     {
         $tenantEntity = $this->Tenants->get($id, [
@@ -20,6 +23,9 @@ class TenantsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Adding a new Tenant
+     */
     public function add(int $flatUnitId): ?Response
     {
         $tenantEntity = $this->Tenants->newEmptyEntity();
@@ -40,6 +46,9 @@ class TenantsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Editing an existing Tenant
+     */
     public function edit(int $id): ?Response
     {
         $tenantEntity = $this->Tenants->get($id, [
@@ -63,6 +72,11 @@ class TenantsController extends AppController
         return $this->render();
     }
 
+    /**
+     * CRUD op: Deleting a Tenant
+     * Warning: This is a destruction act
+     * Security: Only POST and DELETE methods are allowed to prevent web crawler from deleting Tenants
+     */
     public function delete(int $id): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);

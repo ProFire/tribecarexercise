@@ -28,6 +28,9 @@ class VisitorsTable extends Table
         $this->belongsTo("FlatUnits");
     }
 
+    /**
+     * Validation
+     */
     public function validationDefault(Validator $validator): Validator
     {
         // name
@@ -63,6 +66,9 @@ class VisitorsTable extends Table
         return $validator;
     }
 
+    /**
+     * Rules
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('flat_unit_id', 'FlatUnits'));
@@ -75,6 +81,12 @@ class VisitorsTable extends Table
         return $rules;
     }
 
+    /**
+     * Get the check in counter of a specific units
+     * 
+     * @param int $flatUnitId The ID of FlatUnit
+     * @return int The count of check ins of the $flatUnitId
+     */
     public function getCheckInCount(int $flatUnitId): int
     {
         return $this->find("all", [
@@ -85,7 +97,13 @@ class VisitorsTable extends Table
         ])->count();
     }
 
-    public function checkOut($entity): Visitor
+    /**
+     * Check out a visitor
+     * 
+     * @param Visitor $entity The Visitor entity to check out
+     * @return Visitor The checked out Visitor entity
+     */
+    public function checkOut(Visitor $entity): Visitor
     {
         $this->touch($entity, "Visitor.checkIn");
         return $this->save($entity);
