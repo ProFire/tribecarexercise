@@ -17,6 +17,13 @@ $mysql = [
     'username' => env('RDS_USERNAME', ''),
     'password' => env('RDS_PASSWORD', ''),
 ];
+$testMysql = [
+    'host' => env('RDS_ENDPOINT', '127.0.0.1'),
+    'port' => env('RDS_PORT', '3306'),
+    'database' => env('DB_DATABASE', 'tribecarexercise_test'),
+    'username' => env('RDS_USERNAME', ''),
+    'password' => env('RDS_PASSWORD', ''),
+];
 
 /**
  * Lando Configuration
@@ -33,6 +40,12 @@ if (isset($_ENV['LANDO']) && $_ENV['LANDO'] == "ON") {
     $mysql["database"] = LANDO_INFO["database"]["creds"]["database"];
     $mysql["username"] = LANDO_INFO["database"]["creds"]["user"];
     $mysql["password"] = LANDO_INFO["database"]["creds"]["password"];
+
+    $testMysql["host"] = LANDO_INFO["database"]["internal_connection"]["host"];
+    $testMysql["port"] = LANDO_INFO["database"]["internal_connection"]["port"];
+    $testMysql["database"] = LANDO_INFO["database"]["creds"]["database"];
+    $testMysql["username"] = LANDO_INFO["database"]["creds"]["user"];
+    $testMysql["password"] = LANDO_INFO["database"]["creds"]["password"];
 }
 
 return [

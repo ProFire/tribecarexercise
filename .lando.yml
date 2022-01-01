@@ -35,6 +35,12 @@ services:
       user: landoroot
       password: password
       database: tribecarexercise
+  database_test:
+    type: mysql:8.0
+    creds:
+      user: landoroot
+      password: password
+      database: tribecarexercise_test
   phpmyadmin:
     type: phpmyadmin
     ports:
