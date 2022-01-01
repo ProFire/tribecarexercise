@@ -346,8 +346,21 @@ jQuery(document).ready(function($){
             name = jQuery("input[name=name]").val();
             contact = jQuery("input[name=contact]").val();
             nric = jQuery("input[name=nric]").val();
-            unitAllowCheckIn = data["visitorEntity"]["flat_unit"]["check_in_allowed"];
-            page5();
+
+            if (data["success"]) {
+                unitAllowCheckIn = data["visitorEntity"]["flat_unit"]["check_in_allowed"];
+                return page5();
+            }
+
+            jQuery("#spa").removeClass("loading");
+            Object.entries(data["errors"]).forEach(([column, errors]) => {
+                let errorString = "";
+                Object.entries(errors).forEach(([type, message]) => {
+                    errorString += message + "<br />";
+                });
+                jQuery("input[name=" + column + "]").attr("data-html", errorString);
+                jQuery("input[name=" + column + "]").popup("show");
+            });
         });
     });
 

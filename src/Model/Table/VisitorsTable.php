@@ -67,6 +67,11 @@ class VisitorsTable extends Table
     {
         $rules->add($rules->existsIn('flat_unit_id', 'FlatUnits'));
 
+        $rules->add($rules->isUnique(
+            ['contact', 'nric', "check_out"],
+            'You are already checked in.'
+        ));
+
         return $rules;
     }
 

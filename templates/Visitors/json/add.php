@@ -1,5 +1,6 @@
 <?php
 echo json_encode([
-    "success" => true,
+    "success" => $success,
     "visitorEntity" => $visitorEntity,
+    "errors" => $visitorEntity->getErrors(),
 ]);

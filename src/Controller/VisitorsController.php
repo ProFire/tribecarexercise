@@ -64,12 +64,16 @@ class VisitorsController extends AppController
                         "FlatUnits",
                     ],
                 ]);
+                $this->set("success", true);
                 $this->set("visitorEntity", $visitorEntity);
                 return $this->render();
             }
-            $this->Flash->error(__("Visitor could not be added"));
+            if (!$this->request->is('ajax')) {
+                $this->Flash->error(__("Visitor could not be added"));
+            }
         }
 
+        $this->set("success", false);
         $this->set("flatUnitId", $flatUnitId);
         $this->set("visitorEntity", $visitorEntity);
 
