@@ -16,6 +16,29 @@ class TenantsTable extends Table
         $this->belongsTo("FlatUnits");
     }
 
+    public function validationDefault(Validator $validator): Validator
+    {
+        // name
+        $validator
+            ->requirePresence('name', 'create')
+            ->notEmptyString('name')
+            ->add("name", "maxLength", [
+                "rule" => ["maxLength", 200]
+            ])
+        ;
+
+        // contact
+        $validator
+            ->requirePresence('contact', 'create')
+            ->notEmptyString('contact')
+            ->add("contact", "maxLength", [
+                "rule" => ["maxLength", 20]
+            ])
+        ;
+
+        return $validator;
+    }
+
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(

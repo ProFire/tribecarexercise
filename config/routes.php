@@ -23,6 +23,7 @@
 
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
+use Cake\Utility\Inflector;
 
 return static function (RouteBuilder $routes) {
     /*
@@ -45,12 +46,44 @@ return static function (RouteBuilder $routes) {
     $routes->setRouteClass(DashedRoute::class);
 
     $routes->scope('/', function (RouteBuilder $builder) {
-        $builder->connect('/', ['controller' => 'FlatUnits', 'action' => 'index']);
+        $builder->connect('/', ['controller' => 'FlatBlocks', 'action' => 'index']);
 
         /*
          * ...and connect the rest of 'Pages' controller's URLs.
          */
         $builder->connect('/pages/*', 'Pages::display');
+
+        $pathsHtml = [
+            "FlatBlocks" => [ "index", "view", "add", "edit", "delete" ],
+            "FlatUnits" => [ "index", "view", "add", "edit", "delete" ],
+            "Tenants" => [ "view", "add", "edit", "delete" ],
+            "Visitors" => [ "index", "view", "add", "edit", "delete" ],
+        ];
+        foreach ($pathsHtml as $controller => $actions) {
+            foreach ($actions as $action) {
+                $builder->connect('/' . Inflector::dasherize($controller) . '/' . Inflector::dasherize($action) . '/*', ['controller' => $controller, "action" => $action]);
+            }
+        }
+
+        $builder->scope('/api', function (RouteBuilder $routes) {
+            $routes->setExtensions(['json']);
+            $routes->resources('FlatBlocks', function (RouteBuilder $routes) {
+                $routes->resources('FlatUnits');
+            });
+            $routes->resources('FlatUnits', function (RouteBuilder $routes) {
+                $routes->resources('Tenants');
+                $routes->resources('Visitors');
+            });
+            $routes->resources('Tenants');
+            $routes->resources('Visitors', [
+                "map" => [
+                    "visitorCheckOut" => [
+                        "action" => "visitorCheckOut",
+                        "method" => "POST",
+                    ]
+                ]
+            ]);
+        });
 
         /*
          * Connect catchall routes for all controllers.
@@ -83,4 +116,5 @@ return static function (RouteBuilder $routes) {
      * });
      * ```
      */
+    
 };

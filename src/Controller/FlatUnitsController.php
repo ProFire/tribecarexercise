@@ -7,6 +7,19 @@ use Cake\Http\Response;
 
 class FlatUnitsController extends AppController
 {
+    public function index(int $flatBlockId = null): ?Response
+    {
+        if ($flatBlockId === null) {
+            $params = $this->request->getAttribute("params");
+            $flatBlockId = $params["flat_block_id"];
+        }
+        $flatUnitEntities = $this->FlatUnits->find()->where([
+            "flat_block_id" => $flatBlockId,
+        ]);
+        $this->set("flatUnitEntities", $flatUnitEntities);
+        return $this->render();
+    }
+
     public function view(int $id): ?Response
     {
         $flatUnitEntity = $this->FlatUnits->get($id, [
@@ -17,6 +30,7 @@ class FlatUnitsController extends AppController
             ],
         ]);
         $this->set("flatUnitEntity", $flatUnitEntity);
+        $this->set("visitorCheckInCount", $this->FlatUnits->Visitors->getCheckInCount($id));
         return $this->render();
     }
 

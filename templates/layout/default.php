@@ -31,6 +31,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake']) ?>
 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
@@ -38,11 +42,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>PHP</a>
+            <a href="<?= $this->Url->build('/') ?>"><span>Condo</span>Manager</a>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="https://book.cakephp.org/4/">Documentation</a>
-            <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
+            <?= $this->Html->link("Visitor Portal", ["controller" => "Visitors", "action" => "visitorPortal"]) ?>
+            <?= $this->Html->link("Manager", ["controller" => "FlatBlocks", "action" => "index"]) ?>
         </div>
     </nav>
     <main class="main">
