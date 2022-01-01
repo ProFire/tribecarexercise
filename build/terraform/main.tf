@@ -496,6 +496,14 @@ resource "aws_ecs_task_definition" "tribecarexercise-ecs-task-definition" {
           hostPort      = 80
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.tribecarexercise-awslogs-ecs.name
+          awslogs-region        = "ap-southeast-1"
+          awslogs-stream-prefix = "tribecarexercise-awslogs-ecs"
+        }
+      }
     }
   ])
 
@@ -527,6 +535,10 @@ resource "aws_ecs_service" "tribecarexercise-ecs-service" {
     container_name   = "tribecarexercise-ecs-container-definitions"
     container_port   = 80
   }
+}
+
+resource "aws_cloudwatch_log_group" "tribecarexercise-awslogs-ecs" {
+  name = "tribecarexercise-awslogs-ecs"
 }
 
 resource "aws_lb" "tribecarexercise-lb" {
