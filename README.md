@@ -1,53 +1,76 @@
-# CakePHP Application Skeleton
+# Tribe Car exercise
 
-![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
+This repository is done for Tribe Car's coding interview. There are 2 methods to install: Cloud Installation and Localhost Installation
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 4.x.
+# Scenario
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+To develop a simple visitor log system for a condominium manager.
+
+In this system, the manager will be able to manage basic information of tenants/occupants staying in the condominium and track visitors who visit the condominium.
+
+Information of each unit consists of block & unit number, occupant name, contact number. The manager will be able to create units in the condominium, viewing a list of all the units, viewing details of a single unit, updating detail or delete the unit.
+
+The manager will need information of each visitor's name, contact number, unit visiting, last 3 digits of NRIC, and datetime of entry & exit. The manager will be able to view the visitors log for the past 3 months, and edit the exit datetime if necessary, the manager requires to search by the unit number as well in the visitors log.
+
+Visitors will be required to fill in the visit form at the security booth. Visitors will need to fill in the block & unit number which they are visiting, or might just go to the function room for an event. Due to covid-19 measures, the system must be able to prompt the guard to deny entry to visitor(s) if the unit has a maximum up to 5 visitors.
+
+System will be able to determine if it is the same visitor by their unique contact number & last 3 digits of NRIC, the manager can view this visitor when and which units he/she visited.
+
+# Cloud installation
+
+## Pre-requisites to Cloud installation
+
+- You must have an AWS User Account with Access Key and Secret
+- Have AWS CLI installed on your machine
+- Have AWS configure done with your ACCESS KEY and SECRET on your machine
+- Have Terraform installed
 
 ## Installation
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
-
-If Composer is installed globally, run
+Navigate to the ./build/terraform folder and run the following command to set up your AWS infrastructure and CICD pipeline
 
 ```bash
-composer create-project --prefer-dist cakephp/app
+terraform apply
 ```
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+Go to your AWS console and navigate to your developer tools to setup your _code star connection_. You need connect your Github Account to your code star in order to run this repository.
+
+Then go to your _CodePipeline_ and do a "__release change__" on "__tribecarexercise-codepipeline__" pipeline.
+
+## AWS Infrastructure
+
+- 2 public subnets in 2 Availability Zones for High Availability deployment
+- 2 private subnets in 2 Availability Zones for High Availability deployment
+- RDS is deployed in private subnet for security
+- CakePHP is deployed in Fargate in public subnet, behind a [load balancer](http://tribecarexercise.shurn.me/)
+- CICD pipeline is automatically triggered upon git push
+
+# Localhost Installation
+
+## Pre-requisites to Localhost installation
+
+- You must install [Lando](https://docs.lando.dev/).
+
+## Installation
+
+At the application root folder, run the following command:
 
 ```bash
-composer create-project --prefer-dist cakephp/app myapp
+lando start
 ```
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+## Running Unit Test
+
+At the application root folder, run the following command:
 
 ```bash
-bin/cake server -p 8765
+lando phpunit
 ```
 
-Then visit `http://localhost:8765` to see the welcome page.
+## Running Database migrations
 
-## Update
+At the application root folder, run the following command:
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
-
-## Configuration
-
-Read and edit the environment specific `config/app_local.php` and setup the 
-`'Datasources'` and any other configuration relevant for your application.
-Other environment agnostic settings can be changed in `config/app.php`.
-
-## Layout
-
-The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+```bash
+lando cake migrations migrate
+```
