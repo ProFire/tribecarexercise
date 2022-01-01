@@ -74,3 +74,22 @@ At the application root folder, run the following command:
 ```bash
 lando cake migrations migrate
 ```
+
+# Shortcuts
+Due to circumstance, time, and cost constraints, the following shortcuts were taken and how in actual production I would have done differently:
+
+- I would done 3 or more git branches in an actual git for proper deployment cycle
+  - release/prod
+  - release/uat
+  - release/dev
+- I would have done feature branching that corresponds to JIRA or Trello tickets and do _Pull Request_ for code reviews, like:
+  - feature/ABC-1
+  - hotfix/XYZ-2
+- There is only 1 environment in AWS. Ideally, there should be 3, corresponding to the 3 release branches in git. I didn't do it for cost-savings since the 3 environments are identical.
+- There should be an independent terraform git repo and its own pipeline in AWS to ensure a more secure AWS account. It will also allow multiple DevOps to modify the terraform git repo and deploy with S3 state storage and DynamoDB for state-locking. See: [https://learn.hashicorp.com/tutorials/terraform/aws-remote?in=terraform/aws-get-started](https://learn.hashicorp.com/tutorials/terraform/aws-remote?in=terraform/aws-get-started)
+- The password for database should not have been stored in terraform script or in the codes. It should have been stored in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) or [AWS Parameter Store instead](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html).
+- The ECS cluster should have auto-scaling feature so that it can scale the app with varying traffic loads.
+- The RDS database should have been [Aurora Serverless v1](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) and have CloudWatch schedule a regular ping of about 5 minutes. This way, the database can scale with the ECS cluster without Aurora going through cold start.
+- The CICD deployment should be Blue/Green instead.
+- No VPN and VPN gateway was created. I would have either used [OpenVPN](https://shurn.me/blog/2016-12-19/creating-a-hybrid-data-centre-with-openvpn) or [WireGuard](https://www.wireguard.com/) so that the private subnet is accessible from corporate network. That also means the RDS is not accessible unless there is a VPN setup or there is an EC2 instance in Public Subnet to SSH/RDP into.
+- No redis cache was created to store PHP sessions. I would have created a [ElastiCache Redis Cluster](https://aws.amazon.com/elasticache/redis/) to store sessions, so that the PHP app is stateless.
