@@ -133,6 +133,7 @@ class VisitorsController extends AppController
 
         if ($this->request->is('post')) {
             $visitorEntities = $this->Visitors->find("all")->where([
+                "Visitors.contact" => $this->request->getData("contact"),
                 "Visitors.nric" => $this->request->getData("nric"),
             ]);
 
