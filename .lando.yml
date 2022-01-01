@@ -10,11 +10,6 @@ proxy:
   phpmyadmin:
     - "phpmyadmin.tribecarexercise.lndo.site:9883"
 tooling:
-  artisan:
-    service: appserver
-    description: Runs Laravel's Artisan command
-    cmd: ./artisan
-    user: root
   phpunit:
     service: appserver
     description: Runs phpunit command
@@ -31,6 +26,7 @@ services:
       - apt install nano
     run_as_root:
       - composer install -o
+      - bin/cake migrations migrate
     ports:
       - "7880:80"
   database:
