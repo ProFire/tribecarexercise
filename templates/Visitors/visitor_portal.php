@@ -1,4 +1,4 @@
-<h1>Welcome, Visitor</h1>
+<h1 style="text-align: center;">Welcome, Visitor</h1>
 
 <div id="spa" class="ui segment loading basic"><br /><br /><br /></div>
 
@@ -37,6 +37,7 @@ let page2 = function() {
     jQuery.get("<?= $this->Url->build("/api/flat-blocks.json") ?>", function(data, textStatus, jqXHR){
         jQuery("#spa").removeClass("loading");
         let question = document.createElement("h2");
+        jQuery(question).attr("style", "text-align: center;");
         jQuery(question).html("Which block are you visiting?");
 
         let blockSelection = document.createElement("div");
@@ -74,6 +75,7 @@ let page3 = function() {
         jQuery("#spa").removeClass("loading");
 
         let question = document.createElement("h2");
+        jQuery(question).attr("style", "text-align: center;");
         jQuery(question).html("Which unit in block " + data["block"] + " are you visiting?");
 
         let unitSelection = document.createElement("div");
@@ -163,7 +165,7 @@ let page4 = function() {
     jQuery(registrationFormSegmentFieldInputContact).append(registrationFormSegmentFieldInputContactIcon);
 
     let registrationFormSegmentFieldInputContactInput = document.createElement("input");
-    jQuery(registrationFormSegmentFieldInputContactInput).attr("type", "text");
+    jQuery(registrationFormSegmentFieldInputContactInput).attr("type", "tel");
     jQuery(registrationFormSegmentFieldInputContactInput).attr("name", "contact");
     jQuery(registrationFormSegmentFieldInputContactInput).attr("placeholder", "What's your contact number?");
     jQuery(registrationFormSegmentFieldInputContact).append(registrationFormSegmentFieldInputContactInput);
@@ -182,8 +184,12 @@ let page4 = function() {
     jQuery(registrationFormSegmentFieldInputNric).append(registrationFormSegmentFieldInputNricIcon);
 
     let registrationFormSegmentFieldInputNricInput = document.createElement("input");
-    jQuery(registrationFormSegmentFieldInputNricInput).attr("type", "text");
+    jQuery(registrationFormSegmentFieldInputNricInput).attr("type", "number");
     jQuery(registrationFormSegmentFieldInputNricInput).attr("name", "nric");
+    // jQuery(registrationFormSegmentFieldInputNricInput).attr("pattern", "[0-9]{3}");
+    // jQuery(registrationFormSegmentFieldInputNricInput).attr("maxlength", "3");
+    jQuery(registrationFormSegmentFieldInputNricInput).attr("min", "1");
+    jQuery(registrationFormSegmentFieldInputNricInput).attr("max", "999");
     jQuery(registrationFormSegmentFieldInputNricInput).attr("placeholder", "What's the last 3 digits of your NRIC?");
     jQuery(registrationFormSegmentFieldInputNric).append(registrationFormSegmentFieldInputNricInput);
 
@@ -265,8 +271,14 @@ let pageCheckOutForm = function() {
         <div class="ui stacked segment four wide column">\
             <div class="field">\
                 <div class="ui left icon input">\
+                    <i class="phone icon"></i>\
+                    <input type="tel" name="contact" placeholder="What is your contact number?" />\
+                </div>\
+            </div>\
+            <div class="field">\
+                <div class="ui left icon input">\
                     <i class="id card icon"></i>\
-                    <input type="text" name="nric" placeholder="What is the last 3 digits of your NRIC?" />\
+                    <input type="number" name="nric" placeholder="What is the last 3 digits of your NRIC?" min="1" max="999" />\
                 </div>\
             </div>\
             <div class="ui fluid huge orange submit button check-out">Check Out</div>\
@@ -350,12 +362,16 @@ jQuery(document).ready(function($){
     });
     
     // pageCheckOutForm
+    jQuery("#spa").on("change", "input[name=contact]", function() {
+        contact = jQuery("input[name=contact]").val();
+    });
     jQuery("#spa").on("change", "input[name=nric]", function() {
         nric = jQuery("input[name=nric]").val();
     });
     jQuery("#spa").on("click", ".submit.button.check-out", function(){
         jQuery("#spa").addClass("loading");
         jQuery.post("<?= $this->Url->build("/") ?>api/visitors/visitorCheckOut.json", {
+            contact: contact,
             nric: nric
         }, function(data, textStatus, jqXHR){
             pageCheckOutComplete();
